@@ -1,0 +1,7 @@
+base pdfjs
+author Szymon Olewniczak
+email (my first name)@imz.re
+date 2016-07-27
+name PDF.js
+desc Show pdf files using PDF.js
+url http://www.dokuwiki.org/plugin:pdfjs
