@@ -41,10 +41,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
      */
     private function _resolveMediaUrl($linkId = '') {
         global $ACT, $ID, $conf;
-
-        // external URLs are always direct without rewriting
-        if(preg_match('#^https?://#i', $linkId)) {  return $linkId; }
-
+  
         resolve_mediaid(getNS($ID), $linkId, $exists);
         $linkId = idfilter($linkId);
         if (!$exists && ($ACT=='preview')) {
@@ -93,7 +90,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
                 msg($this->getPluginName().': alternative url ('.$mediapath.') will be used for '.$linkId, 2);
             }
         }
-        // $mediapath does not contain "http://" and hostname
+        // $mediapath contains "http://" and hostname
         return $mediapath;
     }
 
