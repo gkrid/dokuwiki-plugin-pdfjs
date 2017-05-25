@@ -1,6 +1,6 @@
 base pdfjs
 author Szymon Olewniczak
-email
+email (my first name) [at] imz [dot] re
 date 2017-02-02
 name PDF.js
 desc Show pdf files using PDF.js

@@ -1,18 +1,12 @@
 <?php
 /**
- * DokuWiki Plugin Gview (Syntax Component)
+ * DokuWiki Plugin Pdfjs (Syntax Component)
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Sahara Satoshi <sahara.satoshi@gmail.com>
+ * @author  Szymon Olewniczak <(my first name) [at] imz [dot] re>
  *
- * @see also:https://docs.google.com/viewer#
- * Google Docs Viewer Terms of Service
- * By using this service you acknowledge that you have read and 
- * agreed to the Google Docs Viewer Terms of Service.
- *
- * Google Docs Viewer plugin
- * Shows a online document using Google Docs Viewer Service.
- * SYNTAX: {{gview [size] [noembed] [noreference] > mediaID|title }}
+ * SYNTAX: {{pdfjs [size] [noembed] [noreference] > mediaID|title }}
  *         {{obj:[class] [size] [noembed] [noreference] > mediaID|title }}
  */
 
