@@ -61,29 +61,21 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         }
 
         // handle viewer parameters
-        // split phrase of parameters by white space
-        $tokens = preg_split('/\s+/', $params);
+        $params = trim(substr($params, strlen('pdfjs')));
+        $size = explode(',', $params, 2);
+        //only height
+        if (count($size) == 1) {
+            $opts['height'] = preg_replace('/\s/', '', $size[0]);
 
-        foreach ($tokens as $token) {
-            // get width and height of iframe
-            $matches=array();
-            if (preg_match('/(\d+(%|em|pt|px)?)([,xX](\d+(%|em|pt|px)?))?/',$token,$matches)){
-                if ($matches[4]) {
-                    // width and height was given
-                    $opts['width'] = $matches[1];
-                    if (!$matches[2]) $opts['width'].= 'px'; //default to pixel when no unit was set
-                    $opts['height'] = $matches[4];
-                    if (!$matches[5]) $opts['height'].= 'px'; //default to pixel when no unit was set
-                    continue;
-                } elseif ($matches[2]) {
-                    // only height was given
-                    $opts['height'] = $matches[1];
-                    if (!$matches[2]) $opts['height'].= 'px'; //default to pixel when no unit was set
-                    continue;
-                }
-            }
-
+        //width, height
+        } else if (count($size) == 2) {
+            $opts['width'] = preg_replace('/\s/', '', $size[0]);
+            $opts['height'] = preg_replace('/\s/', '', $size[1]);
         }
+
+        //add default px unit
+        if (is_numeric($opts['width'])) $opts['width'] .= 'px';
+        if (is_numeric($opts['height'])) $opts['height'] .= 'px';
 
         $opts['id'] = trim($id);
         if (!empty($title)) $opts['title'] = trim($title);
