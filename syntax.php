@@ -6,7 +6,7 @@
  * @author  Sahara Satoshi <sahara.satoshi@gmail.com>
  * @author  Szymon Olewniczak <solewniczak@rid.pl>
  *
- * SYNTAX: {{pdfjs [size] > mediaID|title }}
+ * SYNTAX: {{pdfjs [size] > mediaID?zoom|title }}
  *
  */
 
@@ -24,23 +24,41 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         $this->Lexer->addSpecialPattern('{{pdfjs.*?>.*?}}',$mode,'plugin_pdfjs');
     }
 
+    /*
+     * @var possible zoom values
+     *
+     * @see https://github.com/mozilla/pdf.js/wiki/Viewer-options
+     */
+    protected $zoom_opts = array('auto', 'page-actual', 'page-fit', 'page-width',
+        '50', '75', '100', '125', '150', '200', '300', '400');
+
     /**
      * handle syntax
      */
     public function handle($match, $state, $pos, Doku_Handler $handler){
 
         $opts = array( // set default
-                     'id'      => '',
-                     'title'   => '',
-                     'class'   => '',
-                     'width'   => '100%',
-                     'height'  => '600px',
+                       'id'      => '',
+                       'title'   => '',
+                       'width'   => '100%',
+                       'height'  => '600px',
+                       'zoom'    => '',
                      );
 
         list($params, $media) = explode('>', trim($match,'{}'), 2);
 
         // handle media parameters (linkId and title)
-        list($linkId, $title) = explode('|', $media, 2);
+        list($link, $title) = explode('|', $media, 2);
+
+        //get the zoom
+        list($id, $zoom) = explode('?', $link, 2);
+        if ($zoom) {
+            if (in_array($zoom, $this->zoom_opts)) {
+                $opts['zoom'] = $zoom;
+            } else {
+                msg('pdfjs: unknown zoom: '.$zoom, -1);
+            }
+        }
 
         // handle viewer parameters
         // split phrase of parameters by white space
@@ -67,7 +85,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
 
         }
 
-        $opts['id'] = trim($linkId);
+        $opts['id'] = trim($id);
         if (!empty($title)) $opts['title'] = trim($title);
 
         return array($state, $opts);
@@ -92,13 +110,14 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
      */
     private function _html_embed_pdfjs($opts) {
         // make reference link
-        $url = ml($opts['id']);
+        $src = DOKU_URL.'lib/plugins/pdfjs/pdfjs/web/viewer.html';
+        $src.= '?file=' . rawurlencode(ml($opts['id']));
+        if ($opts['zoom']) $src .= '#zoom='.$opts['zoom'];
 
-		$html = '<iframe src="'.DOKU_URL.'lib/plugins/pdfjs/pdfjs/web/viewer.html';
-		$html.= '?file='.rawurlencode($url).'"';
+		$html = '<iframe src="' . $src . '"';
 		$html.= ' style="';
-		if ($opts['width'])  { $html.= ' width: '.$opts['width'].';'; }
-		if ($opts['height']) { $html.= ' height: '.$opts['height'].';'; }
+		if ($opts['width'])  $html.= ' width: '.$opts['width'].';';
+		if ($opts['height']) $html.= ' height: '.$opts['height'].';';
 		$html.= ' border: none;';
 		$html.= '"></iframe>'.NL;
 
