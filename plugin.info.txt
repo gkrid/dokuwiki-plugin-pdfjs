@@ -1,7 +1,7 @@
 base pdfjs
 author Szymon Olewniczak
-email solewniczak@rid.pl
-date 2017-09-21
+email it@rid.pl
+date 2019-08-06
 name PDF.js
 desc Show pdf files using PDF.js
 url http://www.dokuwiki.org/plugin:pdfjs
