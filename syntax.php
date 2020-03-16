@@ -106,7 +106,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         $src.= '?file=' . rawurlencode(ml($opts['id']));
         if ($opts['zoom']) $src .= '#zoom='.$opts['zoom'];
 
-		$html = '<iframe src="' . $src . '"';
+		$html = '<iframe class="plugin__pdfjs" src="' . $src . '"';
 		$html.= ' style="';
 		if ($opts['width'])  $html.= ' width: '.$opts['width'].';';
 		if ($opts['height']) $html.= ' height: '.$opts['height'].';';
