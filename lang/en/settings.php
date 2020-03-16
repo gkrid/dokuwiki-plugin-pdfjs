@@ -1,3 +1,3 @@
 <?php
 
-$lang['hide_download_button'] = 'Hide a download button in a pdf viewer.';
+$lang['hide_download_button'] = 'Hide the download button from a pdf viewer.';
