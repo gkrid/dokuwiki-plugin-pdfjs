@@ -31,7 +31,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
      */
     protected $zoom_opts = array('auto', 'page-actual', 'page-fit', 'page-width',
         '50', '75', '100', '125', '150', '200', '300', '400');
-
+	protected $display_opts = array('tab', 'embed');
     /**
      * handle syntax
      */
@@ -43,6 +43,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
                        'width'   => '100%',
                        'height'  => '600px',
                        'zoom'    => '',
+					   'display' => 'embed',
                      );
 
         list($params, $media) = explode('>', trim($match,'{}'), 2);
@@ -50,8 +51,19 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         // handle media parameters (linkId and title)
         list($link, $title) = explode('|', $media, 2);
 
+
+		list($idzoom, $display) = explode('?disp=', $link, 2);
+		//get the display
+		if ($display) {
+			if (in_array($display, $this->display_opts)) {
+				$opts['display'] = $display;
+			} else {
+				msg('pdfjs: unknown display: '.$display, -1);
+			}
+		}
+		
         //get the zoom
-        list($id, $zoom) = explode('?', $link, 2);
+        list($id, $zoom) = explode('?', $idzoom, 2);
         if ($zoom) {
             if (in_array($zoom, $this->zoom_opts)) {
                 $opts['zoom'] = $zoom;
@@ -100,20 +112,26 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
      * Generate html for sytax {{pdfjs>}}
      *
      */
-    private function _html_embed_pdfjs($opts) {
+	private function _html_embed_pdfjs($opts) {
         // make reference link
         $src = DOKU_URL.'lib/plugins/pdfjs/pdfjs/web/viewer.html';
         $src.= '?file=' . rawurlencode(ml($opts['id']));
-        if ($opts['zoom']) $src .= '#zoom='.$opts['zoom'];
-
-		$html = '<iframe class="plugin__pdfjs" src="' . $src . '"';
-		$html.= ' style="';
-		if ($opts['width'])  $html.= ' width: '.$opts['width'].';';
-		if ($opts['height']) $html.= ' height: '.$opts['height'].';';
-		$html.= ' border: none;';
-		$html.= '"></iframe>'.NL;
+		if ($opts['display'] == 'tab') {
+			$html = '<a href="' . $src . '" class="media mediafile mf_pdf"';
+			$html.= 'target="_blank"' ;
+			$html.='>'. $opts['title'] . '</a>';
+		} else {
+			if ($opts['zoom']) $src .= '#zoom='.$opts['zoom'];
+			$html = '<iframe class="plugin__pdfjs" src="' . $src . '"';
+			$html.= ' style="';
+			if ($opts['width'])  $html.= ' width: '.$opts['width'].';';
+			if ($opts['height']) $html.= ' height: '.$opts['height'].';';
+			$html.= ' border: none;';
+			$html.= '"></iframe>'.NL;
+		}
 
         return $html;
     }
+	
 
 }
