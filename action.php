@@ -7,7 +7,7 @@ class action_plugin_pdfjs extends DokuWiki_Action_Plugin {
      * @param Doku_Event_Handler $controller
      */
     public function register(Doku_Event_Handler $controller) {
-        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER',  $this, 'add_jsinfo');
+        $controller->register_hook('DOKUWIKI_STARTED', 'AFTER', $this, 'add_jsinfo');
     }
 
     /**
