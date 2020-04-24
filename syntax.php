@@ -64,6 +64,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         list($link, $title) = explode('|', $media, 2);
 
         list($idzoom, $display) = explode('?disp=', $link, 2);
+        $display = trim($display);
         //get the display
         if($display) {
             if(in_array($display, $this->display_opts)) {
