@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
             $iframes.contents().find('#secondaryDownload').remove();
         }
     }
-    remove_buttons()
+    remove_buttons();
     // do it once again after 4 seconds for slower networks -> refer #18
     setTimeout(remove_buttons, 4000);
 });
