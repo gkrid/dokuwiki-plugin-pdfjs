@@ -88,7 +88,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         $params = trim(substr($params, strlen('pdfjs')));
         $size   = explode(',', $params, 2);
         //only height
-        if(count($size) == 1) {
+        if(count($size) == 1 && $size[0] != "")  {
             $opts['height'] = preg_replace('/\s/', '', $size[0]);
 
             //width, height
