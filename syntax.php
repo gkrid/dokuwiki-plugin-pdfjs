@@ -88,7 +88,7 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
         $params = trim(substr($params, strlen('pdfjs')));
         $size   = explode(',', $params, 2);
         //only height
-        if(count($size) == 1) {
+        if(count($size) == 1 && $size[0] != "")  {
             $opts['height'] = preg_replace('/\s/', '', $size[0]);
 
             //width, height
@@ -127,7 +127,11 @@ class syntax_plugin_pdfjs extends DokuWiki_Syntax_Plugin {
     private function _html_embed_pdfjs($opts) {
         // make reference link
         $src = DOKU_URL . 'lib/plugins/pdfjs/pdfjs/web/viewer.html';
-        $src .= '?file=' . rawurlencode(ml($opts['id']));
+        if(substr($opts['id'], 0, 7) == "http://" |substr($opts['id'], 0, 8) == "https://" | $opts['id'][0] == "/")
+            {$src .= '?file=' . $opts['id']; }
+        else {
+            $src .= '?file=' . rawurlencode(ml($opts['id']));
+        }
         if($opts['display'] == 'tab') {
             $html = '<a href="' . $src . '" class="media mediafile mf_pdf"';
             $html .= 'target="_blank"';
